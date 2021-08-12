@@ -1,0 +1,37 @@
+html {
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 10px;
+    background-color: #ededed;
+}
+
+header {
+    text-align: center;
+    font-size: 2em;
+    margin: auto;
+    font-family: cursive;
+
+}
+
+.container {
+    border: 4em solid #FF5E5B;
+    border-radius: 10px;
+    max-width: 600px;
+    min-height: 500px;
+    margin:  auto;
+    display: grid;
+}
+
+
+
+.buttons {
+    max-width: 700px;
+    margin: 10px auto auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.5em;
+    font-family: 'Roboto Mono', monospace;
+}
