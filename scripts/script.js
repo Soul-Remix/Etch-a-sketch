@@ -6,14 +6,12 @@ const boxHover = document.querySelectorAll('#container div');
 const rainbow = document.querySelector('#rainbow');
 const gray = document.querySelector('#gray');
 let div;
-let userChoice;
-let size = 16;
+let userChoice = 16;
 
 sizeBtn.addEventListener('click', gridSize);
-reset.addEventListener('click', startGame);
-grid.addEventListener('mouseover', chooseColor);
-rainbow.addEventListener('click', chooseColor);
-gray.addEventListener('click', chooseColor);
+reset.addEventListener('click', resetGame);
+rainbow.addEventListener('click', changeColorRainbow);
+gray.addEventListener('click', changeColorGray);
 
 function gridSize() {
   userChoice = prompt('Enter your grid size up to 50');
@@ -25,29 +23,16 @@ function gridSize() {
   return createGrid();
 }
 
-function createGrid(choice) {
-  if (userChoice != null) {
-    choice = userChoice * userChoice;
-    grid.setAttribute(
-      'style',
-      `grid-template-columns: repeat(${userChoice},1fr); grid-template-rows: repeat(${userChoice},1fr);`
-    );
-    for (let i = 0; i <= choice; i++) {
-      div = document.createElement('div');
-      div.classList.add('box');
-      grid.appendChild(div);
-    }
-  } else {
-    choice = size * size;
-    grid.setAttribute(
-      'style',
-      `grid-template-columns: repeat(${size},1fr); grid-template-rows: repeat(${size},1fr);`
-    );
-    for (let i = 0; i <= choice; i++) {
-      div = document.createElement('div');
-      div.classList.add('box');
-      grid.appendChild(div);
-    }
+function createGrid() {
+  choice = userChoice * userChoice;
+  grid.setAttribute(
+    'style',
+    `grid-template-columns: repeat(${userChoice},1fr); grid-template-rows: repeat(${userChoice},1fr);`
+  );
+  for (let i = 0; i <= choice; i++) {
+    div = document.createElement('div');
+    div.classList.add('box');
+    grid.appendChild(div);
   }
 }
 
@@ -59,7 +44,12 @@ function clear() {
 
 function startGame() {
   clear();
-  userChoice = null;
+  createGrid();
+}
+
+function resetGame() {
+  clear();
+  userChoice = 16;
   createGrid();
 }
 
@@ -67,31 +57,27 @@ function randomNum() {
   return Math.floor(Math.random() * 257);
 }
 
-function chooseColor(e) {
-  function changeColorRainbow(e) {
-    if (e.target.classList.contains('box')) {
-      e.target.setAttribute(
-        'style',
-        `background-color: rgb(${randomNum()},${randomNum()},${randomNum()})`
-      );
-    }
+function changeColorRainbow(e) {
+  if (e.target.classList.contains('box')) {
+    e.target.setAttribute(
+      'style',
+      `background-color: rgb(${randomNum()},${randomNum()},${randomNum()})`
+    );
   }
-  function changeColorGray(e) {
-    if (e.target.classList.contains('box')) {
-      e.target.setAttribute('style', `background-color: rgb(128,128,128)`);
-    }
+  grid.addEventListener('mouseover', changeColorRainbow);
+  grid.addEventListener('click', changeColorRainbow);
+  grid.removeEventListener('mouseover', changeColorGray);
+  grid.removeEventListener('click', changeColorGray);
+}
+
+function changeColorGray(e) {
+  if (e.target.classList.contains('box')) {
+    e.target.setAttribute('style', `background-color: rgb(128,128,128)`);
   }
-  if (e.target.classList.value === 'rainbow') {
-    grid.addEventListener('mouseover', changeColorRainbow);
-    grid.addEventListener('touchstart', changeColorRainbow);
-    grid.removeEventListener('mouseover', changeColorGray);
-    grid.removeEventListener('touchstart', changeColorGray);
-  } else if (e.target.classList.value === 'gray') {
-    grid.removeEventListener('mouseover', changeColorRainbow);
-    grid.removeEventListener('touchstart', changeColorRainbow);
-    grid.addEventListener('mouseover', changeColorGray);
-    grid.addEventListener('touchstart', changeColorGray);
-  }
+  grid.addEventListener('mouseover', changeColorGray);
+  grid.addEventListener('click', changeColorGray);
+  grid.removeEventListener('mouseover', changeColorRainbow);
+  grid.removeEventListener('click', changeColorRainbow);
 }
 
 startGame();
